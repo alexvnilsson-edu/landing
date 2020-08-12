@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ -f .env ]]; then
+    source .env
+fi
+
+manifests=$(az acr repository show-manifests -n $CONTAINER_REGISTER_NAME --repository $IMAGE_NAME --top 10 --orderby time_desc)
+echo $manifests
+echo $manifests | bin/acr-helpers/manifests.py

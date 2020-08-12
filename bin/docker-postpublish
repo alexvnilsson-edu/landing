@@ -1,0 +1,66 @@
+#!/bin/bash
+set -e
+trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+
+azure_cr_domain=azurecr.io
+
+tmp=$1
+image_digest=$2
+
+echo "Got digest ${image_digest}"
+
+find_repo() {
+    repo=$1
+    data=$2
+
+    if [[ -z $data ]] || [[ -z $repo ]]; then
+        echo "Need two arguments."
+        exit 1
+    fi
+
+    echo $data | bin/docker-postpublish-findrepo.py --repo "${repo}"
+}
+
+if [[ -f .env ]]; then
+    source .env
+fi
+
+if [[ ! -z "${CONTAINER_REGISTER_URL}" ]] && [[ $CONTAINER_REGISTER_URL == *"${azure_cr_domain}" ]]; then
+    if command -v az &> /dev/null; then
+        echo "Verifying successful deployment to registry at $CONTAINER_REGISTER_URL..."
+        
+        repos=$(az acr repository list -n $CONTAINER_REGISTER_NAME)
+
+        reg_repo=$(find_repo "${IMAGE_NAME}" "${repos}")
+        find_repo_ecode=$?
+        
+        if [ $find_repo_ecode -eq 0 ]; then
+            echo "Got list of repos..."
+
+            repo_manifests=$(az acr repository show-manifests -n $CONTAINER_REGISTER_NAME --repository $reg_repo --top 10 --orderby time_desc)
+            echo "Got list of manifests..."
+            ml="${tmp}/manifests.txt"
+            echo "${repo_manifests}" >> $ml
+            ml_a=$(realpath $ml)
+            ${BASH_SOURCE%/*}/acr-helpers/manifests.py --manifests "${ml_a}" --digest "${image_digest}"
+            found_manifest=$?
+            
+            if [[ $found_manifest -eq 0 ]]; then
+                echo "Deploy successful!"
+                exit 0
+            else
+                echo "Deploy failed."
+                exit 1
+            fi
+        else
+            echo "Failed."
+            exit 1
+        fi
+    else
+        echo "Azure CLI doesn't seem to be installed/in PATH. Assuming successful deployment."
+        exit 0
+    fi
+else
+    echo "Idk."
+fi

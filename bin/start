@@ -1,0 +1,4 @@
+#!/bin/bash
+
+node node_modules/.bin/gatsby build
+node node_modules/.bin/gatsby serve -p 9000

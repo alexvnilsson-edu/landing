@@ -1,0 +1,14 @@
+stdout_str=$(<${BASH_SOURCE%/*}/acr-deploy.txt)
+
+lastline=$(echo "${stdout_str}" | tail -n 1)
+
+re_str='\w+: digest: [A-z0-9]{0,10}:([0-9a-f]+)'
+
+if [[ $lastline =~ $re_str ]]; then
+    r_dig="${BASH_REMATCH[1]}"
+else
+    exit 1
+fi
+
+echo "${r_dig}"
+exit 0

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [[ -f .env ]]; then
+    echo "Reading variables from .env file..."
+    source .env
+else
+    echo "No .env found."
+    echo "Do not forget to set-up GihHub secrets!"
+fi
+
+port=${PORT:-8080}
+cname=${CONTAINER_NAME:-container}
+iname=${IMAGE_NAME:-image}
+iversion=${IMAGE_VERSION:-latest}
+
+docker run -d -p $port:9000 --name $cname $iname:$iversion

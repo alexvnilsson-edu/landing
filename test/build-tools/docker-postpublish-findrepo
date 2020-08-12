@@ -1,0 +1,6 @@
+#!/bin/bash
+
+data="[ 'foo', 'bar' ]"
+repo="foo"
+
+echo $data | bin/docker-postpublish-findrepo.py --repo "${repo}"
