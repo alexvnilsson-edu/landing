@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.deploySubpath": ".",
+    "appService.defaultWebAppToDeploy": "/subscriptions/9b4437a8-d8dd-4c2f-936a-0e9a42b466ea/resourceGroups/rg-prod-alexvnilsson-01/providers/Microsoft.Web/sites/app-prod-alexvnilsson-edu"
+}

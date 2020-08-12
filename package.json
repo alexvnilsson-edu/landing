@@ -34,8 +34,9 @@
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "start": "npm run serve",
+    "start": "npm run serve:prod",
     "serve": "gatsby serve",
+    "serve:prod": "npm run build && gatsby serve -p $PORT",
     "clean": "gatsby clean",
     "test": "mocha"
   },
