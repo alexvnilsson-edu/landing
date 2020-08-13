@@ -7,7 +7,7 @@ const Header = ({ siteTitle }) => (
     <nav className="navbar navbar-expand-lg navbar-light bg-transparent px-0">
       <Link className="navbar-brand" to="/">
         <h1 className="display-4">
-          Edu Projekten
+          Edu
         </h1>
       </Link>
     </nav>

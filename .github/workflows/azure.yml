@@ -45,12 +45,13 @@ jobs:
     #     login-server: ${{ env.AZURE_CR_DOMAIN }}
     #     username: ${{ secrets.REGISTRY_USERNAME }}
     #     password: ${{ secrets.REGISTRY_PASSWORD }}
-    #     - name: 'Deploy to Azure Container Instances'
-    #     uses: 'azure/aci-deploy@v1'
-    #     with:
-    #       resource-group: contoso
-    #       image: ${{ env.AZURE_CR_DOMAIN }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
-    #       registry-username: ${{ secrets.REGISTRY_USERNAME }}
-    #       registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-    #       name: contoso-container
-    #       location: 'north europe'
+
+    # - name: 'Deploy to Azure Container Instances'
+    #   uses: 'azure/aci-deploy@v1'
+    #   with:
+    #     resource-group: rg-prod-alexvnilsson-01
+    #     image: ${{ env.AZURE_CR_DOMAIN }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
+    #     registry-username: ${{ secrets.REGISTRY_USERNAME }}
+    #     registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+    #     name: contoso-container
+    #     location: 'north europe'
