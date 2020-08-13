@@ -1,11 +1,30 @@
 #!/bin/bash
 set -e
-trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
-trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 tmp_id=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 tmp="tmp_${tmp_id}"
 mkdir $tmp
+
+last_ec=0
+before_exit_clean=0
+before_exit_run=0
+
+cleanup() {
+    rm -rf "${tmp}/"
+}
+
+before_exit() {
+    if [[ $before_exit_run -ne 0 ]]; then
+        echo "Cleaning up after failure..."
+        cleanup
+
+        before_exit_run=1
+    fi
+}
+
+trap 'last_ec=$?;before_exit' EXIT
+
+#exit 1
 
 LOG_FILE="${tmp}/log.txt"
 
@@ -22,8 +41,6 @@ fi
 iname=${IMAGE_NAME:-image}
 iversion=${IMAGE_VERSION:-latest}
 
-idig="" # empty on purpose
-
 if [[ ! -z "${CONTAINER_REGISTER_URL}" ]]; then
     echo "Tagging $iname:$iversion at $CONTAINER_REGISTER_URL..."
     echo $(docker tag $iname $CONTAINER_REGISTER_URL/$iname:$iversion)
@@ -39,8 +56,6 @@ if [[ ! -z "${CONTAINER_REGISTER_URL}" ]]; then
     docker push $CONTAINER_REGISTER_URL/$iname:$iversion | tee $DP_LOG_FILE
 
     idig=$(${BASH_SOURCE%/*}/acr-helpers/get-deploy-digest $DP_LOG_FILE)
-
-    echo "${idig}"
 else
     echo "Pushing $iname:$iversion..."
     
@@ -49,7 +64,7 @@ fi
 
 bin/docker-postpublish $tmp $idig
 
-rm -rf "${tmp}/"
+cleanup
 
 echo "Done."
 

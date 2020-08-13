@@ -36,6 +36,7 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run serve",
     "serve": "gatsby serve",
+    "serve:prod": "gatsby serve -h $HOST -p $PORT",
     "clean": "gatsby clean",
     "test": "mocha"
   },

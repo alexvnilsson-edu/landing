@@ -13,4 +13,4 @@ cname=${CONTAINER_NAME:-container}
 iname=${IMAGE_NAME:-image}
 iversion=${IMAGE_VERSION:-latest}
 
-docker run -d -p $port:9000 --name $cname $iname:$iversion
+docker run -d -p $port:8000 --name $cname $iname:$iversion

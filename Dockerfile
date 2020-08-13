@@ -10,4 +10,6 @@ RUN npm install
 
 COPY . /app/
 
-EXPOSE 9000
+CMD [ "bin/start" ]
+
+EXPOSE 8000
