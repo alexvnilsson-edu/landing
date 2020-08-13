@@ -10,6 +10,7 @@ env:
   AZURE_WEBAPP_NAME: app-prod-alexvnilsson-edu-01
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   NODE_VERSION: '12.x'
+  AZURE_CR_DOMAIN: alexvnilsson.azurecr.io
   IMAGE_NAME: alexvnilsson-edu-landing
   IMAGE_VERSION: latest
 
@@ -26,19 +27,30 @@ jobs:
     - name: Build image
       run: |
         bin/docker-build
-    - name: Login to ACR
-      id: ecr
-      uses: elgohr/acr-login-action@master
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
       with:
-        service_principal: ${{ secrets.ACR_PRINCIPAL }}
-        service_principal_password: ${{ secrets.ACR_PRINCIPAL_PASSWORD }}
-        tenant: ${{ secrets.TENANT }}
-        registry: ${{ secrets.REGISTRY }}
-        repository: ${{ secrets.REPOSITORY }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: myDocker/repository
-        username: ${{ steps.ecr.outputs.username }}
-        password: ${{ steps.ecr.outputs.password }}
-        registry: ${{ secrets.REGISTRY }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+        registry: ${{ env.AZURE_CR_DOMAIN }}
+        
+    # - uses: azure/docker-login@v1
+    #   with:
+    #     login-server: ${{ env.AZURE_CR_DOMAIN }}
+    #     username: ${{ secrets.REGISTRY_USERNAME }}
+    #     password: ${{ secrets.REGISTRY_PASSWORD }}
+    #     - name: 'Deploy to Azure Container Instances'
+    #     uses: 'azure/aci-deploy@v1'
+    #     with:
+    #       resource-group: contoso
+    #       image: ${{ env.AZURE_CR_DOMAIN }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
+    #       registry-username: ${{ secrets.REGISTRY_USERNAME }}
+    #       registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+    #       name: contoso-container
+    #       location: 'north europe'
