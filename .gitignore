@@ -2,6 +2,10 @@
 # Read more: https://www.gatsbyjs.org/docs/deploying-to-azure/
 build
 
+# tmp
+tmp/
+tmp_/
+
 # Logs
 logs
 *.log
