@@ -1,13 +1,6 @@
 #!/bin/bash
 
-if [[ -f .env ]]; then
-    echo "Reading variables from .env file..."
-    source .env
-else
-    echo "No .env found."
-    echo "Do not forget to set-up GihHub secrets!"
-fi
+iname=${IMAGE_NAME:-landing}
+iversion=${IMAGE_VERSION:-latest}
 
-image_version=
-
-docker build . -t $IMAGE_NAME:latest
+docker build . -t $iname:$iversion
