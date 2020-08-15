@@ -1,18 +1,18 @@
-const assert = require('chai').assert
+const assert = require("chai").assert
 
-describe('Object', function () {
+describe("Object", function () {
   it('should merge two objects resulting in { foo: "Bar", foobar: "Foo" }.', function () {
     const expectedResult = {
-      foo: 'Bar',
-      foobar: 'Foo'
+      foo: "Bar",
+      foobar: "Foo",
     }
 
     const target = {
-      foo: 'Bar'
+      foo: "Bar",
     }
 
     const toMerge = {
-      foobar: "Foo"
+      foobar: "Foo",
     }
 
     const result = Object.assign(target, toMerge)
@@ -21,13 +21,13 @@ describe('Object', function () {
   })
 })
 
-describe('Module importer', function () {
+describe("Module importer", function () {
   it('should import module as expected (in this case, an object: { foo: "Bar" }).', function () {
     const expectedResult = {
-      foo: 'Bar'
+      foo: "Bar",
     }
 
-    const result = require('./core-metadata-lib')
+    const result = require("./core-metadata-lib")
 
     assert.deepEqual(result, expectedResult)
   })

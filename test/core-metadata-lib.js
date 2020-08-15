@@ -1,5 +1,5 @@
 const libObject = {
-  foo: 'Bar'
+  foo: "Bar",
 }
 
 module.exports = libObject

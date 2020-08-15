@@ -17,11 +17,14 @@ const Footer = () => {
     }
   `)
 
-  return (<div className="container">
-    <footer>
-      © {data.site.siteMetadata.copyright.year} {data.site.siteMetadata.copyright.holder}
-    </footer>
-  </div>)
+  return (
+    <div className="container">
+      <footer>
+        © {data.site.siteMetadata.copyright.year}{" "}
+        {data.site.siteMetadata.copyright.holder}
+      </footer>
+    </div>
+  )
 }
 
 export default Footer

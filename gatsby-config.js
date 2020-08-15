@@ -1,10 +1,13 @@
 const siteMetadataDefaults = {
-  title: '',
-  description: '',
-  author: '',
+  title: "",
+  description: "",
+  author: "",
 }
 
-const siteMetadata = Object.assign(siteMetadataDefaults, require('./src/core/metadata'))
+const siteMetadata = Object.assign(
+  siteMetadataDefaults,
+  require("./src/core/metadata")
+)
 
 module.exports = {
   siteMetadata: siteMetadata,
