@@ -26,7 +26,7 @@ jobs:
       run: |
         git fetch ${{ env.GITHUB_REPO_REMOTE }} dev
         git checkout -b ${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }}
-        git merge --ff-only --quiet ${{ env.GITHUB_REPO_REMOTE }}/dev
+        git merge --ff-only ${{ env.GITHUB_REPO_REMOTE }}/dev
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
