@@ -1,6 +1,6 @@
 #!/bin/bash
 
 iname=${IMAGE_NAME:-landing}
-iversion=${IMAGE_VERSION:-latest}
+itag=${IMAGE_TAG:-latest}
 
-docker build . -t $iname:$iversion
+docker build . -t $iname:$itag
