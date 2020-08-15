@@ -8,7 +8,6 @@ on:
 
 env:
   NODE_VERSION: "12.x"
-  GIT_SOFT_MERGE_BRANCH: master-${{ github.sha::8 }}
 
 jobs:
   verify:
@@ -18,9 +17,14 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: master
-    - name: Create integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
-      run: git checkout -b ${{ env.GIT_SOFT_MERGE_BRANCH }}
-    - name: Merge dev into integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
+    - run: echo "::set-env name=SHA_SHORT::$(git rev-parse --short HEAD)"
+    - name: Setup build variables
+      id: build_vars
+      run: | 
+        echo "::set-output name=GIT_INTEGRATION_BRANCH::master-${{ env.SHA_SHORT }}"
+    - name: Create integration branch (${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }})
+      run: git checkout -b ${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }}
+    - name: Merge dev into integration branch (${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }})
       run: |
         git fetch origin/dev
         git merge --ff-only --quiet origin/dev
