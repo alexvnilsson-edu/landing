@@ -11,7 +11,6 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: "."
   NODE_VERSION: "12.x"
   AZURE_CR_DOMAIN: alexvnilsson.azurecr.io
-  IMAGE_NAME: ${{ github.sha::8 }}
 
 jobs:
   build-and-deploy:
@@ -19,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: echo "::set-env name=SHA_SHORT::$(git rev-parse --short HEAD)"
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -31,13 +31,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: Build image ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      - name: Build image ${{ env.IMAGE_NAME }}:${{ env.SHA_SHORT }}
         run: |
           bin/docker-build
       - name: "Deploy to container registry"
         uses: "azure/aci-deploy@v1"
         with:
-          image: ${{ env.AZURE_CR_DOMAIN }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          image: ${{ env.AZURE_CR_DOMAIN }}/${{ env.IMAGE_NAME }}:${{ env.SHA_SHORT }}
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           resource-group: rg-prod-alexvnilsson-01
