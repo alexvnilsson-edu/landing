@@ -9,6 +9,7 @@ on:
 env:
   NODE_VERSION: "12.x"
   GITHUB_REPO_URL: https://github.com/alexvnilsson-edu/landing.git
+  GITHUB_REPO_REMOTE: origin
 
 jobs:
   verify:
@@ -27,8 +28,9 @@ jobs:
       run: git checkout -b ${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }}
     - name: Merge dev into integration branch (${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }})
       run: |
-        git fetch ${{ env.GITHUB_REPO_URL }}/dev
-        git merge --ff-only --quiet ${{ env.GITHUB_REPO_URL }}/dev
+        git remote add ${{ GITHUB_REPO_REMOTE }} ${{ env.GITHUB_REPO_URL }}
+        git fetch ${{ GITHUB_REPO_REMOTE }} dev
+        git merge --ff-only --quiet ${{ GITHUB_REPO_REMOTE }}/dev
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
