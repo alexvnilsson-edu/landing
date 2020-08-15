@@ -15,14 +15,14 @@ jobs:
     name: Verify compatability with master
     runs-on: ubuntu-latest
   steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: master
-    - name: Create integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
-      run: git co -b ${{ env.GIT_SOFT_MERGE_BRANCH }}
-    - name: Merge dev into integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
-      run: git merge --ff-only --quiet origin/dev
-    - name: Use Node.js ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ env.NODE_VERSION }}
+  - uses: actions/checkout@v2
+    with:
+      ref: master
+  - name: Create integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
+    run: git co -b ${{ env.GIT_SOFT_MERGE_BRANCH }}
+  - name: Merge dev into integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
+    run: git merge --ff-only --quiet origin/dev
+  - name: Use Node.js ${{ env.NODE_VERSION }}
+    uses: actions/setup-node@v1
+    with:
+      node-version: ${{ env.NODE_VERSION }}
