@@ -8,7 +8,7 @@ on:
 
 env:
   NODE_VERSION: "12.x"
-  GIT_SOFT_MERGE_BRANCH: master-${{ github.sha }}
+  GIT_SOFT_MERGE_BRANCH: master-${{ github.sha::8 }}
 
 jobs:
   verify:
@@ -21,7 +21,9 @@ jobs:
     - name: Create integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
       run: git checkout -b ${{ env.GIT_SOFT_MERGE_BRANCH }}
     - name: Merge dev into integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
-      run: git merge --ff-only --quiet origin/dev
+      run: |
+        git fetch origin/dev
+        git merge --ff-only --quiet origin/dev
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
       with:
