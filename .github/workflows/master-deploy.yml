@@ -1,0 +1,45 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  AZURE_WEBAPP_NAME: app-prod-alexvnilsson-edu-01
+  AZURE_WEBAPP_PACKAGE_PATH: "."
+  NODE_VERSION: "12.x"
+  AZURE_CR_DOMAIN: alexvnilsson.azurecr.io
+
+jobs:
+  build-and-deploy:
+    name: Deploy image to registry
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: echo "::set-env name=SHA_SHORT::$(git rev-parse --short HEAD)"
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.AZURE_CR_DOMAIN }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: Build image ${{ env.IMAGE_NAME }}:${{ env.SHA_SHORT }}
+      run: |
+        bin/docker-build
+    - name: "Deploy to container registry"
+      uses: "azure/aci-deploy@v1"
+      with:
+        image: ${{ env.AZURE_CR_DOMAIN }}/${{ env.IMAGE_NAME }}:${{ env.SHA_SHORT }}
+        registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        resource-group: rg-prod-alexvnilsson-01
+        location: "north europe"
+        name: ${{ env.IMAGE_NAME }}-container
