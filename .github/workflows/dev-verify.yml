@@ -21,13 +21,11 @@ jobs:
     - run: echo "::set-env name=SHA_SHORT::$(git rev-parse --short HEAD)"
     - name: Setup build variables
       id: build_vars
-      run: | 
-        echo "::set-output name=GIT_INTEGRATION_BRANCH::master-${{ env.SHA_SHORT }}"
-    - name: Create integration branch (${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }})
-      run: git checkout -b ${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }}
+      run: echo "::set-output name=GIT_INTEGRATION_BRANCH::master-${{ env.SHA_SHORT }}"
     - name: Merge dev into integration branch (${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }})
       run: |
         git fetch ${{ env.GITHUB_REPO_REMOTE }} dev
+        git checkout -b ${{ steps.build_vars.outputs.GIT_INTEGRATION_BRANCH }}
         git merge --ff-only --quiet ${{ env.GITHUB_REPO_REMOTE }}/dev
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v1
