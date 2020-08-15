@@ -2,5 +2,5 @@
 
 ## Frameworks
 
-* Mocha
-* Chai Assert
+- Mocha
+- Chai Assert
