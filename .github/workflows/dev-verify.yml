@@ -19,7 +19,7 @@ jobs:
       with:
         ref: master
     - name: Create integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
-      run: git co -b ${{ env.GIT_SOFT_MERGE_BRANCH }}
+      run: git checkout -b ${{ env.GIT_SOFT_MERGE_BRANCH }}
     - name: Merge dev into integration branch (${{ env.GIT_SOFT_MERGE_BRANCH }})
       run: git merge --ff-only --quiet origin/dev
     - name: Use Node.js ${{ env.NODE_VERSION }}
