@@ -1,15 +1,15 @@
-FROM node:12
+FROM mhart/alpine-node:12
 
 RUN mkdir /app
 WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
 
-ADD package.json /app/
-RUN npm install --silent
+ADD package.json package-lock.json /app/
+RUN npm ci
 
 COPY . /app/
 
-CMD [ "bin/start" ]
+CMD [ "npm", "start" ]
 
 EXPOSE 8000
