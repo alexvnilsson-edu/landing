@@ -1,6 +1,6 @@
 # Gatsby-specific
 # Read more: https://www.gatsbyjs.org/docs/deploying-to-azure/
-build
+build/
 
 # tmp
 tmp/
