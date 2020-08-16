@@ -1,0 +1,16 @@
+.cache/
+.git/
+.github/
+.vscode/
+bin/
+build-tools/
+public/
+node_modules/
+
+.env
+.editorconfig
+.gitmodules
+LICENSE
+README.md
+
+*.log

@@ -1,0 +1,32 @@
+// https://material.io/design/color/dark-theme.html#properties
+
+$color-system-surface: #121212;
+$color-system-on-surface: #FFFFFF;
+
+$elevation-surface-opacity: (
+  0: 0%,
+  1: 5%,
+  2: 7%,
+  3: 8%,
+  4: 9%,
+  6: 11%,
+  8: 12%,
+  12: 14%,
+  16: 15%,
+  24: 16%
+);
+
+@function get-elevation-color($level) {
+  @if map-has-key($map: $elevation-surface-opacity, $key: $level) {
+    $elevation-opacity: map-get($map: $elevation-surface-opacity, $key: $level);
+
+    @return mix($color-system-surface, mix($color-system-surface, $color-system-on-surface, $elevation-opacity), (100% - $elevation-opacity));
+  } @else {
+    @error "Elevation level #{$level} is invalid.";
+  }
+}
+
+@debug mix($color-system-surface, mix($color-system-surface, $color-system-on-surface, 7%), (100% - 7%));
+@debug get-elevation-color(2);
+// @debug mix($color-system-surface, $color-system-on-surface, 5%);
+// @debug mix($color-system-surface, scale($color-system-on-surface, $alpha: -5%));
