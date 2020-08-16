@@ -34,6 +34,7 @@ jobs:
     - name: Publish image ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
       run: |
         build-tools/docker-tool tag ${{ env.IMAGE_NAME }} ${{ env.IMAGE_TAG }} --registry ${{ env.AZURE_CR_DOMAIN }}
+        build-tools/docker-tool tag ${{ env.IMAGE_NAME }} latest --registry ${{ env.AZURE_CR_DOMAIN }}
         build-tools/docker-tool publish ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} --registry ${{ env.AZURE_CR_DOMAIN }}
     # - name: "Deploy to container registry"
     #   uses: "azure/aci-deploy@v1"
