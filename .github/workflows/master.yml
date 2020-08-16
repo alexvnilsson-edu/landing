@@ -40,4 +40,4 @@ jobs:
         resource-group: rg-prod-alexvnilsson-01
         location: "north europe"
         name: ${{ env.IMAGE_NAME }}-container
-        dns-label: ${{ env.AZURE_WEBAPP_URL }}
+        dns-name-label: ${{ env.AZURE_WEBAPP_URL }}
