@@ -18,6 +18,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: master
+        submodules: true
     - run: echo "::set-env name=SHA_SHORT::$(git rev-parse --short HEAD)"
     - name: Setup build variables
       id: build_vars
