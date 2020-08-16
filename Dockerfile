@@ -3,12 +3,10 @@ FROM mhart/alpine-node:12
 RUN mkdir /app
 WORKDIR /app
 
-ENV PATH /app/node_modules/.bin:$PATH
-
-ADD package.json package-lock.json /app/
-RUN npm ci
+ENV HOST=0.0.0.0 PORT=8000 PATH=/app/node_modules/.bin:$PATH
 
 COPY . /app/
+RUN npm ci
 
 CMD [ "npm", "start" ]
 
