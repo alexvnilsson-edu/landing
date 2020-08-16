@@ -24,28 +24,6 @@ jobs:
     - name: Build image ${{ steps.docker_image.outputs.ID }}
       run: |
         build-tools/docker-build
-        docker save --output ${{ env.ARTIFACT_NAME }}.tar ${{ steps.docker_image.outputs.ID }}
-    - uses: actions/upload-artifact@v2
-      with:
-        name: ${{ env.ARTIFACT_NAME }}
-        path: ${{ env.ARTIFACT_NAME }}.tar
-  deploy:
-    name: Deploy image to registry
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      AZURE_CR_DOMAIN: alexvnilsson.azurecr.io
-      AZURE_WEBAPP_NAME: app-prod-alexvnilsson-edu-01
-      AZURE_WEBAPP_PACKAGE_PATH: "."
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: ${{ env.ARTIFACT_NAME }}
-    - run: echo "::set-env name=SHA_SHORT::$(git rev-parse --short HEAD)"
-    - name: Unpack image from artifact
-      run: |
-        docker load --input ${{ env.ARTIFACT_NAME }}.tar
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -63,3 +41,21 @@ jobs:
         resource-group: rg-prod-alexvnilsson-01
         location: "north europe"
         name: ${{ env.IMAGE_NAME }}-container
+  deploy:
+    name: Deploy image to registry
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      AZURE_CR_DOMAIN: alexvnilsson.azurecr.io
+      AZURE_WEBAPP_NAME: app-prod-alexvnilsson-edu-01
+      AZURE_WEBAPP_PACKAGE_PATH: "."
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+    - run: echo "::set-env name=SHA_SHORT::$(git rev-parse --short HEAD)"
+    - name: Unpack image from artifact
+      run: |
+        docker load --input ${{ env.ARTIFACT_NAME }}.tar
+    
