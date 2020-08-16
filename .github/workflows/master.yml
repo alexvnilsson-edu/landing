@@ -64,7 +64,7 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - name: Build image ${{ env.IMAGE_NAME }}:${{ env.SHA_SHORT }}
       run: |
-        bin/docker-build
+        build-tools/docker-build
     - name: "Deploy to container registry"
       uses: "azure/aci-deploy@v1"
       with:
