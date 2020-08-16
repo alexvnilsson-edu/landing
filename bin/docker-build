@@ -1,6 +1,0 @@
-#!/bin/bash
-
-iname=${IMAGE_NAME:-landing}
-itag=${IMAGE_TAG:-latest}
-
-docker build . -t $iname:$itag
