@@ -23,7 +23,7 @@ jobs:
       run: echo "::set-output name=ID::${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
     - name: Build image ${{ steps.docker_image.outputs.ID }}
       run: |
-        bin/docker-build
+        build-tools/docker-build
         docker save --output ${{ env.ARTIFACT_NAME }}.tar ${{ steps.docker_image.outputs.ID }}
     - uses: actions/upload-artifact@v2
       with:
@@ -38,10 +38,6 @@ jobs:
       AZURE_WEBAPP_NAME: app-prod-alexvnilsson-edu-01
       AZURE_WEBAPP_PACKAGE_PATH: "."
     steps:
-    - uses: actions/checkout@v2
-      with:
-        repository: alexvnilsson-edu/build-tools.git
-        path: build-tools
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
@@ -58,13 +54,6 @@ jobs:
         login-server: ${{ env.AZURE_CR_DOMAIN }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-    - name: Use Node.js ${{ env.NODE_VERSION }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Build image ${{ env.IMAGE_NAME }}:${{ env.SHA_SHORT }}
-      run: |
-        build-tools/docker-build
     - name: "Deploy to container registry"
       uses: "azure/aci-deploy@v1"
       with:
