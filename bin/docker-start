@@ -8,9 +8,9 @@ else
     echo "Do not forget to set-up GihHub secrets!"
 fi
 
-port=${PORT:-8080}
+PORT=${PORT:-8000}
 cname=${CONTAINER_NAME:-container}
 iname=${IMAGE_NAME:-image}
 iversion=${IMAGE_VERSION:-latest}
 
-docker run -d -p $port:8000 --name $cname $iname:$iversion
+docker run -d -p $PORT:$PORT --name $cname $iname:$iversion

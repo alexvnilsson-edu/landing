@@ -1,0 +1,9 @@
+#!/bin/bash
+# required: build-tools
+set -e
+
+source .env
+
+IMAGE_TAG=$(git rev-parse --short HEAD)
+
+build-tools/docker/build "${IMAGE_NAME}" --tag "${IMAGE_TAG}" --tag latest
