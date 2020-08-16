@@ -30,13 +30,17 @@ jobs:
     - name: Build image ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
       run: |
         build-tools/docker/build ${{ env.IMAGE_NAME }} -t latest -t ${{ env.IMAGE_TAG }}
-    - name: "Deploy to container registry"
-      uses: "azure/aci-deploy@v1"
-      with:
-        image: ${{ env.AZURE_CR_DOMAIN }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-        registry-username: ${{ secrets.REGISTRY_USERNAME }}
-        registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-        resource-group: rg-prod-alexvnilsson-01
-        location: "north europe"
-        name: ${{ env.IMAGE_NAME }}-container
-        dns-name-label: ${{ env.AZURE_WEBAPP_URL }}
+    - name: Publish image ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      run: |
+        build-tools/docker-tool tag ${{ env.IMAGE_NAME }} ${{ env.IMAGE_TAG }} --registry ${{ env.AZURE_CR_DOMAIN }}
+        build-tools/docker-tool publish ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} --registry ${{ env.AZURE_CR_DOMAIN }}
+    # - name: "Deploy to container registry"
+    #   uses: "azure/aci-deploy@v1"
+    #   with:
+    #     image: ${{ env.AZURE_CR_DOMAIN }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+    #     registry-username: ${{ secrets.REGISTRY_USERNAME }}
+    #     registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+    #     resource-group: rg-prod-alexvnilsson-01
+    #     location: "north europe"
+    #     name: ${{ env.IMAGE_NAME }}-container
+    #     dns-name-label: ${{ env.AZURE_WEBAPP_URL }}
