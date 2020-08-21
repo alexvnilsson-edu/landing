@@ -35,7 +35,6 @@
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run serve",
-    "prestart": "npm run build",
     "serve": "gatsby serve -H $HOST -p $PORT",
     "clean": "gatsby clean",
     "git:submodules:update": "git submodule update --recursive --remote",
