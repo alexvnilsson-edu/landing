@@ -31,7 +31,7 @@ jobs:
     - name: Build image ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
       run: |
         build-tools/docker/build ${{ env.IMAGE_NAME }} -t latest -t ${{ env.IMAGE_TAG }}
-    - name: Publish image ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+    - name: Publish image ${{ env.IMAGE_NAME }}:latest
       run: |
         build-tools/docker-tool tag ${{ env.IMAGE_NAME }} ${{ env.IMAGE_TAG }} --registry ${{ env.AZURE_CR_DOMAIN }}
         build-tools/docker-tool tag ${{ env.IMAGE_NAME }} latest --registry ${{ env.AZURE_CR_DOMAIN }}
