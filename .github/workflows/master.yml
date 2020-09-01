@@ -5,14 +5,16 @@ on:
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: "."
+  AZURE_WEBAPP_NAME: app-prod-alexvnilsson-edu-landing
   AZURE_WEBAPP_URL: edu.alexvnilsson.se
   DOCKER_NAMESPACE: alexvnilssonedu
   DOCKER_REPOSITORY: landing
+  DOCKER_IMAGE_TAG: latest
   NODE_VERSION: "12.x"
 
 jobs:
   build:
-    name: Build image
+    name: Build and push Docker image
     runs-on: ubuntu-latest
     steps:
     - uses: azure/login@v1
@@ -24,4 +26,9 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: ${{ env.DOCKER_NAMESPACE }}/${{ env.DOCKER_REPOSITORY }}
-        tag_with_ref: true
+        tags: ${{ env.DOCKER_IMAGE_TAG }}
+    - uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: ${{ env.DOCKER_NAMESPACE }}/${{ env.DOCKER_REPOSITORY }}:${{ env.DOCKER_IMAGE_TAG }}
